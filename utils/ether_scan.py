@@ -8,9 +8,8 @@ class EtherscanAPIClient:
 
     API_URL = 'https://api.etherscan.io/api'
 
-    def __init__(self, address: str, api_key: str):
+    def __init__(self, api_key: str):
 
-        self._address = address
         self._api_key = api_key
 
     def get_blocks_by_timestamp(self, from_timestamp: str, to_timestamp: str) -> Tuple[str, str]:

@@ -10,3 +10,6 @@ def get_mandatory_env_variable(env_variable_key: str):
         logging.error(error_message)
 
         raise RuntimeError(error_message)
+
+def decode_from_hex(input: str):
+    return bytes.fromhex(input[2:])[0]
