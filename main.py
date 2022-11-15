@@ -1,4 +1,5 @@
 import struct
+
 from flask import Flask, render_template
 
 from utils.common import get_mandatory_env_variable, decode_from_hex
@@ -46,6 +47,4 @@ def homepage():
 
 if __name__ == '__main__':
     es_client.create_eth_to_usd_index()
-    es_client.save_eth_prices_in_usd_to_elasticsearch()
     app.run(debug=True)
-    

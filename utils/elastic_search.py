@@ -1,3 +1,5 @@
+import requests
+
 from elasticsearch import Elasticsearch
 
 from utils.common import get_mandatory_env_variable
@@ -11,14 +13,6 @@ class ElasticSearchClient:
         self._client.indices.create(index=name, body=request_body)
 
     def create_eth_to_usd_index(self):
-        request_body = {
-            'mappings': {
-                'examplecase': {
-                    'properties': {
-                        'timeStamp': {'index': 'not_analyzed', 'type': 'string'},
-                        'ethUsdPrice': {'index': 'not_analyzed', 'type': 'float'},
-                    }
-                }
-            }
-        }
-        self.create_index(name='eth_to_usd', request_body=request_body)
+        eth_to_usd_response = requests.get('https://www.coingecko.com/price_charts/279/usd/90_days.json')
+        parsed_eth_to_usd_list = eth_to_usd_response.json()['stats']
+        self.index(index='eth_to_usd', document=parsed_eth_to_usd_list)
