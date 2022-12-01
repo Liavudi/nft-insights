@@ -37,7 +37,7 @@ class ElasticSearchClient:
                 'timeStamp': eth_to_usd_timestamp,
                 'price': eth_to_usd_price
             }
-            # This takes too long - need to do in bulk - but failed to make it work (parsing problem, look at previous commit - 99cee8bea03d06be86d87ed211ec4a329aff4f6e)
+            # This takes too long - need to do in bulk  - but failed to make it work (parsing problem, look at previous commit - 99cee8bea03d06be86d87ed211ec4a329aff4f6e)
             self._client.index(index=self.ETH_TO_USD_INDEX_NAME,
                                document=item,
                                id=1)

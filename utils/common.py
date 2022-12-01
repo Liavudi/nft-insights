@@ -1,6 +1,8 @@
 import os
 import logging
 import requests
+import math
+
 
 from typing import List, Tuple
 
@@ -15,8 +17,8 @@ def get_mandatory_env_variable(env_variable_key: str):
         raise RuntimeError(error_message)
 
 
-def decode_from_hex(input: str):
-    return bytes.fromhex(input[2:])[0]
+def calculate_price(input: str):
+    return int(input, 0) / 10**18
 
 
 class StateHelper:
@@ -38,11 +40,17 @@ class StateHelper:
                     price
                 ]
             )
+        self.eth_to_usd = eth_to_usd_in_seconds
 
     def get_eth_price_in_usd(self, timestamp: str):
         """
         returns the price of the closest eth_price_timestamp before the given timestamp
         """
+        price_before = None
         for eth_price_timestamp, price in self.eth_to_usd:
-            if eth_price_timestamp > timestamp:
-                return price
+            if eth_price_timestamp < timestamp:
+                price_before = price
+        if price_before == None:
+            raise RuntimeError(
+                f'there is no price found for the given timestamp: {timestamp}')
+        return price_before
