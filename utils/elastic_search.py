@@ -1,7 +1,6 @@
-import json
-import requests
-from datetime import datetime, timedelta
 from elasticsearch import Elasticsearch, helpers
+import json
+
 
 class ElasticSearchClient:
     ETH_TO_USD_INDEX_NAME = 'eth_to_usd_mapping'
@@ -15,32 +14,41 @@ class ElasticSearchClient:
         if index_exists == False:
             self._client.indices.create(index=name, body=request_body)
 
-    def create_eth_to_usd_index(self):
-        request_body = {
-            'mappings': {
-                'properties': {
-                    'timeStamp': {'type': 'float'},
-                    'price': {'type': 'float'}
+    def is_timestamp_exists(self, starting_timestamp: int, ending_timestamp: int):
+        result = self._client.search(index=self.ETH_TO_USD_INDEX_NAME, query={
+            "bool": {
+                "filter": [{
+                    "range": {
+                        "timeStamp": {
+                            "gte": f'{starting_timestamp}'
+                        }
+                    }
+                },
+                    {
+                    "range": {
+                        "timeStamp": {
+                            "lte": f'{ending_timestamp}'
+                        }
+                    }
                 }
+                ]
             }
-        }
-        self.create_index(self.ETH_TO_USD_INDEX_NAME,
-                          request_body=request_body)
+        }, filter_path=['hits.total.value']).body['hits']['total']['value']
+        if result >= 1:
+            return True
+        return False
 
-    def populate_eth_to_usd_index(self, eth_to_usd_list):
+    def populate_eth_to_usd_index(self, eth_to_usd_list: list):
         actions = [{
             "_index": self.ETH_TO_USD_INDEX_NAME,
-            "_type": 'eth_to_usd',
-            "_id": 1,
             "_source": {
-                eth_to_usd_list
+                "timeStamp": timestamp,
+                "price": price
             }
-        }]
-       
-            # # This takes too long - need to do in bulk  - but failed to make it work (parsing problem, look at previous commit - 99cee8bea03d06be86d87ed211ec4a329aff4f6e)
-            # self._client.index(index=self.ETH_TO_USD_INDEX_NAME,
-            #                    document=item,
-            #                    id=1)
+        }
+            for timestamp, price in eth_to_usd_list
+        ]
+
         helpers.bulk(self._client, actions)
 
     def get_eth_price_in_usd(self, timestamp: str):
@@ -49,10 +57,11 @@ class ElasticSearchClient:
                 'filter': [{
                     'range': {
                         'timeStamp': {
-                            'lte': timestamp
+                            'gte': timestamp
                         }
                     }
                 }]
             }
-        }, size=1, filter_path=['hits.max_score'])
-        print(result)
+        }, filter_path=['hits.hits._source']).body['hits']['hits']
+
+        return result

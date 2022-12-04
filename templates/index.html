@@ -121,7 +121,7 @@
 
    data.forEach(values => {
       if (values.price >= 0){
-         let x= values.timestamp * 1000
+         let x = parseInt(values.timestamp) * 1000
          parsedData.push({x: x, y: values.price, currency:'$:val'});
 
       }
