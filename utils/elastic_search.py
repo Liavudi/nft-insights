@@ -1,6 +1,4 @@
 from elasticsearch import Elasticsearch, helpers
-import json
-
 
 class ElasticSearchClient:
     ETH_TO_USD_INDEX_NAME = 'eth_to_usd_mapping'

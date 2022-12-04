@@ -55,7 +55,7 @@ def populate_one_day_to_elastic(starting_timestamp: int):
     es_client.populate_eth_to_usd_index(eth_to_usd_list)
     
 
-es_client.get_eth_price_in_usd("1663981200")
+print(es_client.get_eth_price_in_usd("1663981200"))
 
 
 
@@ -67,7 +67,7 @@ def homepage():
 
 @app.route('/contract-average-gas-fee', methods=['GET'])
 def contract_average_gas_fee():
-    return 'thats great'
+    return ''
 
 
 if __name__ == '__main__':
