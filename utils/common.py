@@ -2,10 +2,17 @@ import os
 import logging
 import requests
 import math
+import json
 
 
 from typing import List, Tuple
 
+class jsonDataTest:
+    def __init__(self, data) -> None:
+        self.data = data    
+        self.json_object = json.dumps(self.data, indent=4)
+        with open("sample.json", "w") as outfile:
+            outfile.write(self.json_object)
 
 def get_mandatory_env_variable(env_variable_key: str):
     try:
@@ -14,7 +21,6 @@ def get_mandatory_env_variable(env_variable_key: str):
         error_message = f"Failed to get mandatory enviroment variable {env_variable_key}"
         logging.error(error_message)
 
-        raise RuntimeError(error_message)
 
 
 def calculate_price(input: str):

@@ -6,8 +6,192 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NFT Isights</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/data.js"></script>
+   <script src="https://code.highcharts.com/modules/exporting.js"></script>
+   <script src="https://code.highcharts.com/modules/export-data.js"></script>
+   <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+ 
 </head>
 <body>
-    
+        <div id = "container" style = "width: 1550px; height: 500px; margin: 0 auto;"></div>
+      
+    <script>
+        $(document).ready(function() {
+        var  data =  [
+        {
+            "timestamp": 1663992000,
+            "price": "none"
+        },
+        {
+            "timestamp": 1663995600,
+            "price": "none"
+        },
+        {
+            "timestamp": 1663999200,
+            "price": 8.74699079413159e-06
+        },
+        {
+            "timestamp": 1664002800,
+            "price": 9.279543523291096e-06
+        },
+        {
+            "timestamp": 1664006400,
+            "price": 8.119495365362046e-06
+        },
+        {
+            "timestamp": 1664010000,
+            "price": "none"
+        },
+        {
+            "timestamp": 1664013600,
+            "price": "none"
+        },
+        {
+            "timestamp": 1664017200,
+            "price": "none"
+        },
+        {
+            "timestamp": 1664020800,
+            "price": "none"
+        },
+        {
+            "timestamp": 1664024400,
+            "price": "none"
+        },
+        {
+            "timestamp": 1664028000,
+            "price": 8.790311946389566e-06
+        },
+        {
+            "timestamp": 1664031600,
+            "price": 5.10288120513115e-05
+        },
+        {
+            "timestamp": 1664035200,
+            "price": 1.358989013666025e-05
+        },
+        {
+            "timestamp": 1664038800,
+            "price": 1.0732160716014888e-05
+        },
+        {
+            "timestamp": 1664042400,
+            "price": 1.72045149379232e-05
+        },
+        {
+            "timestamp": 1664046000,
+            "price": 1.2332076626888597e-05
+        },
+        {
+            "timestamp": 1664049600,
+            "price": "none"
+        },
+        {
+            "timestamp": 1664053200,
+            "price": "none"
+        },
+        {
+            "timestamp": 1664056800,
+            "price": 8.948794413272933e-06
+        },
+        {
+            "timestamp": 1664060400,
+            "price": 5.274268119777815e-06
+        },
+        {
+            "timestamp": 1664064000,
+            "price": 1.1776839653530412e-05
+        },
+        {
+            "timestamp": 1664067600,
+            "price": 1.0566086352429171e-05
+        },
+        {
+            "timestamp": 1664071200,
+            "price": 4.197375146513186e-05
+        },
+        {
+            "timestamp": 1664074800,
+            "price": "none"
+        }
+    ]
+      
+      let parsedData = [];
+
+   data.forEach(values => {
+      if (values.price >= 0){
+         let x= values.timestamp * 1000
+         parsedData.push({x: x, y: values.price, currency:'$:val'});
+
+      }
+   });
+  
+   console.log(parsedData);
+            Highcharts.chart('container', {
+               chart: {
+                  zoomType: 'x'
+               },
+               title: {
+                  text: 'Gas fees/Time(USD)',
+                  align: 'left'
+               },
+               subtitle: {
+                  text: 
+                     'Best time to buy NFTs',
+                     align: 'left'
+               },
+               xAxis: {
+                  type: 'datetime', 
+               },
+               yAxis: {
+                  title:{
+                     text:'Dollars'
+                  },
+                  labels: {
+                  formatter: function () {
+                    return '$' + this.axis.defaultLabelFormatter.call(this);
+                  }   
+                  }
+               },
+               legend: {
+                  enabled: false
+               },
+               plotOptions: {
+                  area: {
+                  fillColor: {
+                  linearGradient: {
+                  x1: 0,
+                  y1: 0,
+                  x2: 0,
+                  y2: 1
+               },
+                  stops: [
+                     [0, Highcharts.getOptions().colors[0]],
+                     [1, Highcharts.color(Highcharts.getOptions().colors[0]).setOpacity(0).get('rgba')]
+                  ]
+               },
+                  marker: {
+                  radius: 2
+               },
+                  lineWidth: 1,
+                  states: {
+                     hover: {
+                     lineWidth: 1
+                  }
+               },
+                  threshold: null
+               }
+            },
+               series: [{
+                  type: 'area',
+                  data: parsedData,
+                  
+               }]
+            });
+         })
+
+   
+    </script>
 </body>
 </html>
