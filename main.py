@@ -1,4 +1,5 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
+import json
 
 from utils.common import get_mandatory_env_variable, calculate_price, StateHelper, jsonDataTest
 from utils.elastic_search import ElasticSearchClient
@@ -55,20 +56,24 @@ def populate_one_day_to_elastic(starting_timestamp: int):
     es_client.populate_eth_to_usd_index(eth_to_usd_list)
     
 
-print(es_client.get_eth_price_in_usd("1663981200"))
-
+data = es_client.get_eth_price_in_usd("1663981200")
 
 
 @app.route('/')
 def homepage():
 
-    return render_template('index.html')
+    return render_template('index.html', chart_data=data)
 
 
 @app.route('/contract-average-gas-fee', methods=['GET'])
 def contract_average_gas_fee():
     return ''
 
+@app.route('/check_selected', methods=['GET','POST'])
+def check_selected():
+    global selected
+    post = request.args.get('post', 0, type=int)
+    return json.dumps({'selected post': str(post)})
 
 if __name__ == '__main__':
     contracts = ['0xb47e3cd837dDF8e4c57F05d70Ab865de6e193BBB',

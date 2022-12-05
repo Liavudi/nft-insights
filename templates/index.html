@@ -14,120 +14,23 @@
  
 </head>
 <body>
+   
         <div id = "container" style = "width: 1550px; height: 500px; margin: 0 auto;"></div>
-      
     <script>
         $(document).ready(function() {
-        var  data =  [
-        {
-            "timestamp": 1663992000,
-            "price": "none"
-        },
-        {
-            "timestamp": 1663995600,
-            "price": "none"
-        },
-        {
-            "timestamp": 1663999200,
-            "price": 8.74699079413159e-06
-        },
-        {
-            "timestamp": 1664002800,
-            "price": 9.279543523291096e-06
-        },
-        {
-            "timestamp": 1664006400,
-            "price": 8.119495365362046e-06
-        },
-        {
-            "timestamp": 1664010000,
-            "price": "none"
-        },
-        {
-            "timestamp": 1664013600,
-            "price": "none"
-        },
-        {
-            "timestamp": 1664017200,
-            "price": "none"
-        },
-        {
-            "timestamp": 1664020800,
-            "price": "none"
-        },
-        {
-            "timestamp": 1664024400,
-            "price": "none"
-        },
-        {
-            "timestamp": 1664028000,
-            "price": 8.790311946389566e-06
-        },
-        {
-            "timestamp": 1664031600,
-            "price": 5.10288120513115e-05
-        },
-        {
-            "timestamp": 1664035200,
-            "price": 1.358989013666025e-05
-        },
-        {
-            "timestamp": 1664038800,
-            "price": 1.0732160716014888e-05
-        },
-        {
-            "timestamp": 1664042400,
-            "price": 1.72045149379232e-05
-        },
-        {
-            "timestamp": 1664046000,
-            "price": 1.2332076626888597e-05
-        },
-        {
-            "timestamp": 1664049600,
-            "price": "none"
-        },
-        {
-            "timestamp": 1664053200,
-            "price": "none"
-        },
-        {
-            "timestamp": 1664056800,
-            "price": 8.948794413272933e-06
-        },
-        {
-            "timestamp": 1664060400,
-            "price": 5.274268119777815e-06
-        },
-        {
-            "timestamp": 1664064000,
-            "price": 1.1776839653530412e-05
-        },
-        {
-            "timestamp": 1664067600,
-            "price": 1.0566086352429171e-05
-        },
-        {
-            "timestamp": 1664071200,
-            "price": 4.197375146513186e-05
-        },
-        {
-            "timestamp": 1664074800,
-            "price": "none"
-        }
-    ]
-      
-      let parsedData = [];
-
-   data.forEach(values => {
-      if (values.price >= 0){
-         let x = parseInt(values.timestamp) * 1000
-         parsedData.push({x: x, y: values.price, currency:'$:val'});
-
-      }
-   });
-  
-   console.log(parsedData);
+        
+            let data_parsed = JSON.parse('{{ chart_data|tojson }}')
+            
+            let parsedData = [];
+            data_parsed.forEach(values => {
+                let y = parseFloat(values['_source']['price'])
+            if ( y >= 0){
+                let x = parseInt(values['_source']['timeStamp']) * 1000
+                parsedData.push({x: x, y: y, currency:'$:val'});
+            }
+            });
+    
+            
             Highcharts.chart('container', {
                chart: {
                   zoomType: 'x'
