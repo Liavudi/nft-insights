@@ -1,5 +1,5 @@
-from flask import Flask, render_template, redirect, url_for, request
-
+import json
+from flask import Flask, render_template, redirect, url_for, request, Response
 
 from utils.common import get_mandatory_env_variable, calculate_price, StateHelper
 from utils.elastic_search import ElasticSearchClient
@@ -52,25 +52,29 @@ def populate_one_day_to_elastic(contract_address: str, starting_timestamp: int):
     es_client.populate_eth_to_usd_index(parsed_list)
 
 is_logged = False
-email = "crypto_whale"
-password = "js*gnHfcx!"
+USER = {"email": "crypto_whale", "password": "js*gnHfcx!"}
 
 @app.route('/')
-def homepage():
+def home():
     if not is_logged:
         return redirect(url_for('login'))
     data = es_client.get_eth_price_in_usd()
     return render_template('index.html', chart_data=data)
-
 
 @app.route('/login', methods=['POST'])
 def login():
     global is_logged
     user_email = request.form['email']
     user_pass = request.form['password']
-    if user_email== email and user_pass == password:
+    if user_email== USER['email'] and user_pass == USER['password']:
         is_logged = True
-    return redirect(url_for('homepage'))
+        return Response(json.dumps({
+            'message': 'Logged successfully'
+            }), status=200)
+    return Response(json.dumps({
+        'error': 'Wrong user credentials'
+    }), status=400)
+   
 
 @app.route('/login')
 def is_user_logged():

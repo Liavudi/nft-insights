@@ -27,15 +27,22 @@
     <script>
         $(document).ready(function() {  
         $("#btn").click(function (){
-            let email = $('#email').val()
-            let password = $('#password').val()
-            $.post( "/login", {
-            email: email,
-            password:password
+            const email = $('#email').val()
+            const password = $('#password').val()
+
+            $.ajax('/login', { data: { email: email,
+            password:password},
+                type: "POST",
+                error: function(res) {
+                    alert(`${JSON.parse(res.responseText).error}, status=${res.status}`)
+                    
+                },
+                success: function(res) {
+                    alert(JSON.parse(res).message);
+                    window.location.href = '/';
+                }
             });
-        })
-        
-    
+        });
     })
     </script>
 </body>
