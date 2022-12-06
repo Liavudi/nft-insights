@@ -18,18 +18,16 @@
         <div id = "container" style = "width: 1550px; height: 500px; margin: 0 auto;"></div>
     <script>
         $(document).ready(function() {
-        
             let data_parsed = JSON.parse('{{ chart_data|tojson }}')
-            
             let parsedData = [];
+
             data_parsed.forEach(values => {
                 let y = parseFloat(values['_source']['price'])
-            if ( y >= 0){
                 let x = parseInt(values['_source']['timeStamp']) * 1000
                 parsedData.push({x: x, y: y, currency:'$:val'});
-            }
             });
-    
+            console.log(parsedData)
+            
             
             Highcharts.chart('container', {
                chart: {
@@ -44,9 +42,14 @@
                      'Best time to buy NFTs',
                      align: 'left'
                },
+             
+        
                xAxis: {
-                  type: 'datetime', 
-               },
+            type:'datetime',
+            // min: Date.UTC(2022, 11, 20),
+            // max: Date.UTC(2022, 11,21)
+           
+            },
                yAxis: {
                   title:{
                      text:'Dollars'
@@ -89,6 +92,7 @@
                series: [{
                   type: 'area',
                   data: parsedData,
+                   
                   
                }]
             });

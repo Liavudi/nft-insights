@@ -49,8 +49,8 @@ class ElasticSearchClient:
 
         helpers.bulk(self._client, actions)
 
-    def get_eth_price_in_usd(self, timestamp: str):
-        result = self._client.search(index=self.ETH_TO_USD_INDEX_NAME, query={
+    def get_eth_price_in_usd(self, timestamp: str = '0'):
+        result = self._client.search(index=self.ETH_TO_USD_INDEX_NAME, size=1000, query={
             'bool': {
                 'filter': [{
                     'range': {
