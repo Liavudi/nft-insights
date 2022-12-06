@@ -20,13 +20,12 @@
         $(document).ready(function() {
             let data_parsed = JSON.parse('{{ chart_data|tojson }}')
             let parsedData = [];
-
             data_parsed.forEach(values => {
                 let y = parseFloat(values['_source']['price'])
                 let x = parseInt(values['_source']['timeStamp']) * 1000
                 parsedData.push({x: x, y: y, currency:'$:val'});
             });
-            console.log(parsedData)
+           
             
             
             Highcharts.chart('container', {
@@ -46,9 +45,6 @@
         
                xAxis: {
             type:'datetime',
-            // min: Date.UTC(2022, 11, 20),
-            // max: Date.UTC(2022, 11,21)
-           
             },
                yAxis: {
                   title:{

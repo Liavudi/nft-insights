@@ -1,7 +1,7 @@
-from flask import Flask, render_template, request
-import json
+from flask import Flask, render_template, redirect, url_for, request
 
-from utils.common import get_mandatory_env_variable, calculate_price, StateHelper, jsonDataTest
+
+from utils.common import get_mandatory_env_variable, calculate_price, StateHelper
 from utils.elastic_search import ElasticSearchClient
 from utils.ether_scan import EtherscanAPIClient
 
@@ -37,12 +37,10 @@ def get_average_contracts_gas_fee(contract_address: str, from_timestamp: float, 
         average_price = sum / len(transaction_logs)
         return average_price
     
-
-
 def populate_one_day_to_elastic(contract_address: str, starting_timestamp: int):
     one_hour = 3600
     eth_to_usd_list = []
-    hours = 3      
+    hours = 23      
     for i in range(hours):
         eth_to_usd_list.append(
             [f"{starting_timestamp}", f"{get_average_contracts_gas_fee(contract_address, starting_timestamp, starting_timestamp + one_hour)}"])
@@ -53,17 +51,30 @@ def populate_one_day_to_elastic(contract_address: str, starting_timestamp: int):
             parsed_list.append(i)    
     es_client.populate_eth_to_usd_index(parsed_list)
 
-populate_one_day_to_elastic('0xb47e3cd837dDF8e4c57F05d70Ab865de6e193BBB', 1665018000 )
+is_logged = False
+email = "crypto_whale"
+password = "js*gnHfcx!"
 
 @app.route('/')
 def homepage():
+    if not is_logged:
+        return redirect(url_for('login'))
     data = es_client.get_eth_price_in_usd()
     return render_template('index.html', chart_data=data)
 
 
-@app.route('/contract-average-gas-fee', methods=['GET'])
-def contract_average_gas_fee():
-    return ''
+@app.route('/login', methods=['POST'])
+def login():
+    global is_logged
+    user_email = request.form['email']
+    user_pass = request.form['password']
+    if user_email== email and user_pass == password:
+        is_logged = True
+    return redirect(url_for('homepage'))
+
+@app.route('/login')
+def is_user_logged():
+    return render_template('login.html', is_logged=is_logged)
 
 if __name__ == '__main__':
     contracts = ['0xb47e3cd837dDF8e4c57F05d70Ab865de6e193BBB',
