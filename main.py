@@ -42,10 +42,7 @@ def get_average_contracts_gas_fee(contract_address: str, from_timestamp: float, 
 def populate_one_day_to_elastic(contract_address: str, starting_timestamp: int):
     one_hour = 3600
     eth_to_usd_list = []
-    hours = 23
-    ending_timestamp = starting_timestamp + (one_hour * (hours - 1))
-    if es_client.is_timestamp_exists(starting_timestamp, ending_timestamp):
-            raise RuntimeError('Timestamp already exists in the elastic search')
+    hours = 3      
     for i in range(hours):
         eth_to_usd_list.append(
             [f"{starting_timestamp}", f"{get_average_contracts_gas_fee(contract_address, starting_timestamp, starting_timestamp + one_hour)}"])
@@ -56,6 +53,7 @@ def populate_one_day_to_elastic(contract_address: str, starting_timestamp: int):
             parsed_list.append(i)    
     es_client.populate_eth_to_usd_index(parsed_list)
 
+populate_one_day_to_elastic('0xb47e3cd837dDF8e4c57F05d70Ab865de6e193BBB', 1665018000 )
 
 @app.route('/')
 def homepage():

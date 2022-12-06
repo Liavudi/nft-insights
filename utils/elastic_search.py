@@ -12,7 +12,7 @@ class ElasticSearchClient:
         if index_exists == False:
             self._client.indices.create(index=name, body=request_body)
 
-    def is_timestamp_exists(self, starting_timestamp: int, ending_timestamp: int):
+    def check_if_timestamp_exists(self, starting_timestamp: int, ending_timestamp: int):
         result = self._client.search(index=self.ETH_TO_USD_INDEX_NAME, query={
             "bool": {
                 "filter": [{
@@ -33,10 +33,11 @@ class ElasticSearchClient:
             }
         }, filter_path=['hits.total.value']).body['hits']['total']['value']
         if result >= 1:
-            return True
-        return False
+            raise RuntimeError('Timestamp already exists in the elastic search')
+        
 
     def populate_eth_to_usd_index(self, eth_to_usd_list: list):
+        self.check_if_timestamp_exists(starting_timestamp=eth_to_usd_list[0][0], ending_timestamp=eth_to_usd_list[-1][0])
         actions = [{
             "_index": self.ETH_TO_USD_INDEX_NAME,
             "_source": {
