@@ -38,13 +38,13 @@ def get_average_contracts_gas_fee(contract_address: str, from_timestamp: float, 
         return average_price
     
 def populate_one_day_to_elastic(contract_address: str, starting_timestamp: int):
-    one_hour = 3600
+    one_hour_in_seconds = 3600
     eth_to_usd_list = []
     hours = 23      
     for i in range(hours):
         eth_to_usd_list.append(
-            [f"{starting_timestamp}", f"{get_average_contracts_gas_fee(contract_address, starting_timestamp, starting_timestamp + one_hour)}"])
-        starting_timestamp += one_hour
+            [f"{starting_timestamp}", f"{get_average_contracts_gas_fee(contract_address, starting_timestamp, starting_timestamp + one_hour_in_seconds)}"])
+        starting_timestamp += one_hour_in_seconds
     parsed_list = []
     for i in eth_to_usd_list:
         if i[1] != 'None':

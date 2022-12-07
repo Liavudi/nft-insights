@@ -27,7 +27,7 @@ def calculate_price(input: str):
 
 
 class StateHelper:
-    # Added a hack to keep eth_to_usd in a list instead of elastic search for simplicity (but at cost of performance of course)
+
     eth_to_usd: List[Tuple[str, float]] = []
 
     def __init__(self) -> None:
