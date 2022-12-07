@@ -25,7 +25,11 @@
     </div>
     
     <script>
-        $(document).ready(function() {  
+        $(document).ready(function() {
+        if (JSON.parse('{{is_logged|tojson}}')=== true){
+            window.location.href ='/'
+            alert('Already logged, redirecting to index')
+        }
         $("#btn").click(function (){
             const email = $('#email').val()
             const password = $('#password').val()

@@ -54,6 +54,10 @@ def populate_one_day_to_elastic(contract_address: str, starting_timestamp: int):
 is_logged = False
 USER = {"email": "crypto_whale", "password": "js*gnHfcx!"}
 
+# populate_one_day_to_elastic('0xb47e3cd837dDF8e4c57F05d70Ab865de6e193BBB',1667696400)
+# populate_one_day_to_elastic('0xb47e3cd837dDF8e4c57F05d70Ab865de6e193BBB',1667782800)
+# populate_one_day_to_elastic('0xb47e3cd837dDF8e4c57F05d70Ab865de6e193BBB',1667869200)
+
 @app.route('/')
 def home():
     if not is_logged:
@@ -83,5 +87,4 @@ def is_user_logged():
 if __name__ == '__main__':
     contracts = ['0xb47e3cd837dDF8e4c57F05d70Ab865de6e193BBB',
                  '0x60e4d786628fea6478f785a6d7e704777c86a7c6']
-
     app.run(debug=True)
