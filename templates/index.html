@@ -14,21 +14,22 @@
  
 </head>
 <body>
-   
+
         <div id = "container" style = "width: 1550px; height: 500px; margin: 0 auto;"></div>
+
     <script>
         $(document).ready(function() {
-            let data_parsed = JSON.parse('{{ chart_data|tojson }}')
-            let parsedData = [];
-            data_parsed.forEach(values => {
+            let chartData = JSON.parse('{{ chart_data|tojson }}')
+            let parsedChartData = [];
+            chartData.forEach(values => {
                 let y = parseFloat(values['_source']['price'])
                 let x = parseInt(values['_source']['timeStamp']) * 1000
-                parsedData.push({x: x, y: y, currency:'$:val'});
+                parsedChartData.push({x: x, y: y, currency:'$:val'});
             });
-           
+            
             Highcharts.chart('container', {
                chart: {
-                  zoomType: 'x'
+                  zoomType: 'x',
                },
                title: {
                   text: 'Gas fees/Time(USD)',
@@ -38,12 +39,10 @@
                   text: 
                      'Best time to buy NFTs',
                      align: 'left'
-               },
-             
-        
+               },  
                xAxis: {
-            type:'datetime',
-            },
+                    type:'datetime',
+                },
                yAxis: {
                   title:{
                      text:'Dollars'
@@ -85,14 +84,12 @@
             },
                series: [{
                   type: 'area',
-                  data: parsedData,
-                   
-                  
+                  name:'Gas fee/Time(USD)',
+                  data: parsedChartData,
                }]
             });
          })
 
-   
     </script>
 </body>
 </html>

@@ -51,12 +51,6 @@ def populate_one_day_to_elastic(contract_address: str, starting_timestamp: int):
             parsed_list.append(i)    
     es_client.populate_eth_to_usd_index(parsed_list)
 
-is_logged = False
-USER = {"email": "crypto_whale", "password": "js*gnHfcx!"}
-
-# populate_one_day_to_elastic('0xb47e3cd837dDF8e4c57F05d70Ab865de6e193BBB',1667696400)
-# populate_one_day_to_elastic('0xb47e3cd837dDF8e4c57F05d70Ab865de6e193BBB',1667782800)
-# populate_one_day_to_elastic('0xb47e3cd837dDF8e4c57F05d70Ab865de6e193BBB',1667869200)
 
 @app.route('/')
 def home():
@@ -79,12 +73,14 @@ def login():
         'error': 'Wrong user credentials'
     }), status=400)
    
-
+   
 @app.route('/login')
 def is_user_logged():
     return render_template('login.html', is_logged=is_logged)
 
 if __name__ == '__main__':
+    is_logged = False
+    USER = {"email": "crypto_whale", "password": "js*gnHfcx!"}
     contracts = ['0xb47e3cd837dDF8e4c57F05d70Ab865de6e193BBB',
                  '0x60e4d786628fea6478f785a6d7e704777c86a7c6']
     app.run(debug=True)
