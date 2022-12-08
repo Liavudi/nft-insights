@@ -11,17 +11,35 @@
    <script src="https://code.highcharts.com/modules/exporting.js"></script>
    <script src="https://code.highcharts.com/modules/export-data.js"></script>
    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
- 
+   <style>
+      #logout-btn{
+         background-color:rgb(61, 133, 216);
+         margin-left:10px;
+         color:white;
+         border:none;
+         border-radius:5px;
+         width: 5%;
+         height: 20px;
+         margin: 0px 0px 20px 20px;
+      }
+      #logout-btn:hover{
+         cursor: pointer;
+         background-color: rgb(96, 161, 236);
+      }
+   </style>
 </head>
 <body>
          <h2 id="user-message"></h2>
-         <div style="margin:20px">To logout <button id="logout">Press Me</button></div>
+            <button
+             id="logout-btn">
+               Log out
+            </button>
          <div id = "container" style = "width: 1550px; height: 500px; margin: 0 auto;"></div>
 
     <script>
         $(document).ready(function() {
             document.getElementById('user-message').innerHTML = `Welcome back ${JSON.parse('{{user|tojson}}')['name']}`
-            $('#logout').click(function(){
+            $('#logout-btn').click(function(){
                $.ajax('/logout', {
                 type: "POST",
                 error: function(res) {

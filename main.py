@@ -92,7 +92,7 @@ def logout():
 
 if __name__ == '__main__':
     
-    USER = {"name": "crypto_whale", "password": "js*gnHfcx!", "is_logged": False}
+    USER = {"name": "crypto_whale", "password": "js*gnHfcx!", "is_logged": True}
     contracts = ['0xb47e3cd837dDF8e4c57F05d70Ab865de6e193BBB',
                  '0x60e4d786628fea6478f785a6d7e704777c86a7c6']
     app.run(debug=True)
