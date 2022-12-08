@@ -14,11 +14,25 @@
  
 </head>
 <body>
-
-        <div id = "container" style = "width: 1550px; height: 500px; margin: 0 auto;"></div>
+         <h2 id="user-message"></h2>
+         <div style="margin:20px">To logout <button id="logout">Press Me</button></div>
+         <div id = "container" style = "width: 1550px; height: 500px; margin: 0 auto;"></div>
 
     <script>
         $(document).ready(function() {
+            document.getElementById('user-message').innerHTML = `Welcome back ${JSON.parse('{{user|tojson}}')['name']}`
+            $('#logout').click(function(){
+               $.ajax('/logout', {
+                type: "POST",
+                error: function(res) {
+                    alert(`${JSON.parse(res.responseText).error}, status=${res.status}`)  
+                },
+                success: function(res) {
+                    alert(JSON.parse(res).message);
+                    window.location.href = '/';
+                }
+               })
+            })
             let chartData = JSON.parse('{{ chart_data|tojson }}')
             let parsedChartData = [];
             chartData.forEach(values => {

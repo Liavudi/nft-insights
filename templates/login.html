@@ -29,12 +29,12 @@
         if (JSON.parse('{{is_logged|tojson}}')=== true){
             window.location.href ='/'
             alert('Already logged, redirecting to index')
-        }
+    }
         $("#btn").click(function (){
-            const email = $('#email').val()
+            const name = $('#email').val()
             const password = $('#password').val()
 
-            $.ajax('/login', { data: { email: email,
+            $.ajax('/login', { data: { name: name,
             password:password},
                 type: "POST",
                 error: function(res) {

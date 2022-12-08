@@ -54,33 +54,45 @@ def populate_one_day_to_elastic(contract_address: str, starting_timestamp: int):
 
 @app.route('/')
 def home():
-    if not is_logged:
+    if not USER['is_logged']:
         return redirect(url_for('login'))
     data = es_client.get_eth_price_in_usd()
-    return render_template('index.html', chart_data=data)
+    return render_template('index.html', chart_data=data, user={"name": USER['name']})
+
 
 @app.route('/login', methods=['POST'])
 def login():
-    global is_logged
-    user_email = request.form['email']
+    global USER
+    user_name = request.form['name']
     user_pass = request.form['password']
-    if user_email== USER['email'] and user_pass == USER['password']:
-        is_logged = True
+    if user_name== USER['name'] and user_pass == USER['password']:
+        USER['is_logged'] = True
         return Response(json.dumps({
             'message': 'Logged successfully'
             }), status=200)
     return Response(json.dumps({
         'error': 'Wrong user credentials'
     }), status=400)
-   
+
    
 @app.route('/login')
 def is_user_logged():
-    return render_template('login.html', is_logged=is_logged)
+    return render_template('login.html', is_logged=USER['is_logged'])
+
+@app.route('/logout', methods=['POST'])
+def logout():
+    if USER['is_logged']:
+        USER['is_logged'] = False
+        return Response(json.dumps({
+            'message': 'Logged out successfully'
+        }), status=200)
+    return Response(json.dumps({
+        'error': "User isn't logged in"
+    }), status=400)
 
 if __name__ == '__main__':
-    is_logged = False
-    USER = {"email": "crypto_whale", "password": "js*gnHfcx!"}
+    
+    USER = {"name": "crypto_whale", "password": "js*gnHfcx!", "is_logged": False}
     contracts = ['0xb47e3cd837dDF8e4c57F05d70Ab865de6e193BBB',
                  '0x60e4d786628fea6478f785a6d7e704777c86a7c6']
     app.run(debug=True)
